@@ -12,7 +12,7 @@
 *.env
 
 # Azure Developer CLI directory
-.azd/
+#.azd/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

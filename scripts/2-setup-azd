@@ -85,6 +85,11 @@ azd env set AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED true
 
 print_success "Azure tracing Gen AI content recording enabled"
 
+# Set Azure location
+azd env set AZURE_LOCATION swedencentral
+
+print_success "Azure location set to swedencentral"
+
 # Set Azure AI agent model configuration
 azd env set AZURE_AI_AGENT_MODEL_NAME gpt-4.1
 azd env set AZURE_AI_AGENT_MODEL_VERSION 2025-04-14
@@ -106,8 +111,8 @@ export AZURE_AI_EMBED_DEPLOYMENT_NAME="text-embedding-3-large"
 print_success "Azure AI Search configuration exported"
 
 # Customize Azure resource names
-azd env set AZURE_AIPROJECT_NAME lab519-aiproject
-azd env set AZURE_AISERVICES_NAME lab519-airesource
+azd env set AZURE_AIPROJECT_NAME lab516-aiproject
+azd env set AZURE_AISERVICES_NAME lab516-airesource
 
 print_success "Azure resource names customized"
 
