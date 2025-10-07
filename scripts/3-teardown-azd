@@ -52,9 +52,9 @@ if ! command -v azd >/dev/null 2>&1; then
     exit 1
 fi
 
-# Check if .azd directory exists
-if [ ! -d ".azd" ]; then
-    print_warning ".azd directory not found - nothing to clean up"
+# Check if .infra-setup directory exists
+if [ ! -d ".infra-setup" ]; then
+    print_warning ".infra-setup directory not found - nothing to clean up"
     azd_directory_exists=false
 else
     azd_directory_exists=true
@@ -65,7 +65,7 @@ fi
 # ---------------------
 
 if [ "$azd_directory_exists" = true ]; then
-    cd .azd
+    cd .infra-setup
 
     # Check if there was a deployment by looking for .azure directory AND environment folders with .env files
     deployment_found=false
@@ -118,15 +118,15 @@ if [ "$azd_directory_exists" = true ]; then
     # ---------------------
 
     echo "→ Directory detected - starting cleanup"
-    print_warning "The .azd directory contains local configuration and state files."
+    print_warning "The .infra-setup directory contains local configuration and state files."
 
-    if confirm "Do you want to delete the .azd directory?"; then
-        rm -rf .azd
-        print_success "Deleted .azd directory"
+    if confirm "Do you want to delete the .infra-setup directory?"; then
+        rm -rf .infra-setup
+        print_success "Deleted .infra-setup directory"
         echo ""
         print_success "Teardown complete! All resources and local files have been removed."
     else
-        print_info "Keeping .azd directory with local configuration"
+        print_info "Keeping .infra-setup directory with local configuration"
         echo ""
         print_success "Teardown complete! Azure resources removed, local files preserved."
     fi

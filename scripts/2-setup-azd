@@ -50,16 +50,16 @@ else
 fi
 
 # ---------------------
-# Setup .azd Directory
+# Setup .infra-setup Directory
 # ---------------------
 
-echo "→ Setting up .azd directory..."
+echo "→ Setting up .infra-setup directory..."
 
-if [ ! -d ".azd" ]; then
-    mkdir -p .azd
-    print_success "Created .azd directory"
+if [ ! -d ".infra-setup" ]; then
+    mkdir -p .infra-setup
+    print_success "Created .infra-setup directory"
 else
-    print_success ".azd directory already exists"
+    print_success ".infra-setup directory already exists"
 fi
 
 # ---------------------
@@ -68,7 +68,7 @@ fi
 
 echo "→ Initializing AI agents template..."
 
-cd .azd
+cd .infra-setup
 
 # Initialize with the AI agents template using MSIGNITE25-LAB516 as environment name
 azd init -t get-started-with-ai-agents -e MSIGNITE25-LAB516
@@ -93,6 +93,7 @@ print_success "Azure location set to swedencentral"
 # Set Azure AI agent model configuration
 azd env set AZURE_AI_AGENT_MODEL_NAME gpt-4.1
 azd env set AZURE_AI_AGENT_MODEL_VERSION 2025-04-14
+azd env set AZURE_AI_AGENT_DEPLOYMENT_NAME gpt-4.1
 
 print_success "Azure AI agent model configured: gpt-4.1 (version: 2025-04-14)"
 
@@ -104,11 +105,12 @@ print_success "Azure AI agent deployment capacity set to 100"
 print_success "Azure AI embed deployment capacity set to 50"
 
 # Set Azure AI Search configuration
-export USE_AZURE_AI_SEARCH_SERVICE="true"
-export AZURE_AI_SEARCH_INDEX_NAME="zava-products"
-export AZURE_AI_EMBED_DEPLOYMENT_NAME="text-embedding-3-large"
+azd env set USE_AZURE_AI_SEARCH_SERVICE true
+azd env set AZURE_AI_SEARCH_INDEX_NAME "zava-products"
+azd env set AZURE_AI_EMBED_DEPLOYMENT_NAME "text-embedding-3-large"
+azd env set AZURE_AI_EMBED_MODEL_NAME "text-embedding-3-large"
 
-print_success "Azure AI Search configuration exported"
+print_success "Azure AI Search configuration set"
 
 # Customize Azure resource names
 azd env set AZURE_AIPROJECT_NAME lab516-aiproject

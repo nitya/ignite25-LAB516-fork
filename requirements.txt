@@ -2,7 +2,7 @@
 mkdocs-material
 
 # Install source dependencies
--r .azd/requirements-dev.txt
+-r .infra-setup/requirements-dev.txt
 
 # Install local package in editable mode
--e .azd/src
+-e .infra-setup/src

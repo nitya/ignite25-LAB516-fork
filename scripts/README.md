@@ -12,7 +12,7 @@ For simplicity, all steps are coded in `scripts/` that you can just run at comma
 Run this command from root of repo:
 
 ```bash
-./scripts/setup-auth
+./scripts/1-setup-auth
 ```
 
 ### 1.2. Setup Template
@@ -20,7 +20,7 @@ Run this command from root of repo:
 Run this command from the root of repo:
 
 ```bash
-./scripts/setup-azd
+./scripts/2-setup-azd
 ```
 
 #### **Recommendation**: 
@@ -31,20 +31,103 @@ Once the `.azure/MSIGNITE25-LAB516/.env` is created, specify `AZURE_LOCATION="sw
 Once the setup is complete, you can deploy:
 
 ```bash
-cd .azd
+cd .infra-setup
 azd up
 ```
 
+### 1.3. Do Customizations
 
-### 1.3. Teardown Template
+First, add any additional models required for the project with 2 steps:
+
+1. Update `scripts/0-additional-models.json` to specify models
+1. Run `scripts/0-additional-models` to update azd template with these details
+1. Run `azd provision` to update the infrastructure provisioning
+
+_Note:_ Doing "azd up" will also deploy the app again. If you didn't change the app source code, then azd provision is the best command to minimize overheads.
+
+
+### 1.4. Teardown Template
 
 Run this command from the root of repo:
 
 ```bash
-./scripts/teardown-azd
+./scripts/3-teardown-azd
 ```
 
 ---
 
-## 2. Red Teaming Test
+## 2. Add Model Deployments
+
+The azd template can be extended to support additional model deployments beyond the default GPT-4o-mini and text-embedding-3-small models. This section explains how to add custom model deployments using a Bicep parameter array approach.
+
+### 2.1. Bicep Parameter Array Approach
+
+The recommended approach uses a flexible array parameter in the main Bicep template to support additional model deployments:
+
+#### **Step 1: Add Parameter to main.bicep**
+Add this parameter to `infra/main.bicep`:
+
+```bicep
+@description('Additional model deployments to create')
+param additionalModelDeployments array = []
+```
+
+#### **Step 2: Update Model Deployment Logic**
+Modify the `aiDeployments` variable in `main.bicep`:
+
+```bicep
+var aiDeployments = concat(
+  aiChatModel,
+  useSearchService ? aiEmbeddingModel : [],
+  additionalModelDeployments  // Add this line
+)
+```
+
+#### **Step 3: Update Parameters File**
+Add entry to `infra/main.parameters.json`:
+
+```json
+"additionalModelDeployments": {
+  "value": "${ADDITIONAL_MODEL_DEPLOYMENTS=[]}"
+}
+```
+
+#### **Step 4: Configure Additional Models**
+Create a JSON configuration file with model details:
+
+```json
+[
+  {
+    "name": "gpt-4",
+    "model": {
+      "format": "OpenAI",
+      "name": "gpt-4", 
+      "version": "2024-05-13"
+    },
+    "sku": {
+      "name": "GlobalStandard",
+      "capacity": 10
+    }
+  }
+]
+```
+
+### 2.2. Automated Script Approach
+
+Use the provided script to automatically apply these changes:
+
+```bash
+./scripts/0-additional-models
+```
+
+This script will:
+- Read model configurations from `scripts/0-additional-models.json`
+- Automatically modify the required Bicep and parameter files
+- Set up environment variables for deployment
+- Prepare the infrastructure for additional model deployments
+
+**Note**: After running the script, use `azd provision` to deploy the additional models.
+
+---
+
 
