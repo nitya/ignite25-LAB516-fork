@@ -121,6 +121,3 @@ markdown_extensions:
 
 # Navigation  ...............................................
 nav:
-  - Home: 'README.md'
-  - Demo:
-    - 'Step 1': '01-demo/01-step.md'
