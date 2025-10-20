@@ -14,6 +14,11 @@
 # Azure Developer CLI directory
 .infra-setup/
 
+# AI Red Teaming scan output directories and files
+.scan_*/
+redteam_outputs/
+*.scan
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -423,4 +428,8 @@ FodyWeavers.xsd
 # MkDocs
 site/
 .cache/
+
+# AI Red Teaming Output Files
+redteam_outputs/
+**/redteam_outputs/
 

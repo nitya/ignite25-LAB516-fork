@@ -30,22 +30,22 @@ async def run_red_team():
     # Initialize Azure credentials
     credential = DefaultAzureCredential()
 
-    # Get AI project parameters from environment variables (matching evaluate.py)
-    project_endpoint = os.environ.get("AZURE_EXISTING_AIPROJECT_ENDPOINT")
-    deployment_name = os.getenv("AZURE_AI_AGENT_DEPLOYMENT_NAME")  # Using getenv for consistency with evaluate.py
-    agent_id = os.environ.get("AZURE_EXISTING_AGENT_ID")
+    # Get AI project parameters from environment variables
+    project_endpoint = os.environ.get("AZURE_AI_PROJECT_ENDPOINT")
+    deployment_name = os.getenv("AZURE_AI_AGENT_DEPLOYMENT")
+    agent_id = os.environ.get("AZURE_AI_AGENT_ID")
     agent_name = os.environ.get("AZURE_AI_AGENT_NAME")
     
     # Validate required environment variables
     if not project_endpoint:
-        raise ValueError("Please set the AZURE_EXISTING_AIPROJECT_ENDPOINT environment variable.")
+        raise ValueError("Please set the AZURE_AI_PROJECT_ENDPOINT environment variable.")
         
     if not agent_id and not agent_name:
-        raise ValueError("Please set either AZURE_EXISTING_AGENT_ID or AZURE_AI_AGENT_NAME environment variable.")
+        raise ValueError("Please set either AZURE_AI_AGENT_ID or AZURE_AI_AGENT_NAME environment variable.")
 
     with DefaultAzureCredential(exclude_interactive_browser_credential=False) as credential:
         with AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client:
-            # Look up the agent by name if agent ID is not provided (matching evaluate.py)
+            # Look up the agent by name if agent ID is not provided
             if not agent_id and agent_name:
                 for agent in project_client.agents.list_agents():
                     if agent.name == agent_name:
@@ -57,7 +57,7 @@ async def run_red_team():
                 
             agent = project_client.agents.get_agent(agent_id)
             
-            # Use model from agent if not provided - matching evaluate.py
+            # Use model from agent if not provided
             if not deployment_name:
                 deployment_name = agent.model
                 
